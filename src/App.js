@@ -1,25 +1,39 @@
-import logo from './logo.svg';
 import './App.css';
+import {Switch, BrowserRouter as Router, Route} from 'react-router-dom'
+import StartPage from "./pages/StartPage/StartPage";
+import LobbyPage from "./pages/LobbyPage/LobbyPage";
+import GamePage from "./pages/GamePage/GamePage";
+import {LoaderProvider} from "./context/LoaderContext";
+import Loader from "./pages/Loader/Loader";
+import {OverlayProvider} from "./context/OverlayContext";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    return (
+        <LoaderProvider>
+            <OverlayProvider>
+                <Loader/>
+                <Router>
+                    <Switch>
+                        <Route path="/lobby/:id">
+                            <LobbyPage/>
+                        </Route>
+
+                        <Route path="/game/:id">
+                            <h1>gfsadas</h1>
+                        </Route>
+
+                        <Route path="/game">
+                            <GamePage/>
+                        </Route>
+
+                        <Route path="/">
+                            <StartPage/>
+                        </Route>
+                    </Switch>
+                </Router>
+            </OverlayProvider>
+        </LoaderProvider>
+    );
 }
 
 export default App;
