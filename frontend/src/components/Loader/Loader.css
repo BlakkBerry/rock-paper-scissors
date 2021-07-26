@@ -1,0 +1,36 @@
+#loader {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    width: 100%;
+    min-height: 100vh;
+    background-color: #4203C9;
+    animation: transition ease-in-out 1 forwards;
+}
+
+@keyframes transition {
+    0% {
+        transform: scaleX(0);
+        transform-origin: left;
+    }
+
+    33% {
+        transform: scaleX(1);
+        transform-origin: left;
+    }
+    33.001% {
+        transform: scaleX(1);
+        transform-origin: right;
+    }
+
+    66% {
+        transform: scaleX(0);
+        transform-origin: right;
+    }
+
+    100% {
+        transform: scaleX(0);
+        transform-origin: right;
+    }
+}

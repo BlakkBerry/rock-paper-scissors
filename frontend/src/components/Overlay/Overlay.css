@@ -1,0 +1,44 @@
+#overlay {
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-color: rgba(0, 0, 0, 0.7);
+    animation: fadein 1s;
+}
+
+.overlay__continue {
+    color: #c8c8c8;
+    font-size: 2rem;
+    position: absolute;
+    bottom: 20px;
+    text-align: center;
+    opacity: .8;
+    animation: textAppearance 1s ease-in-out forwards;
+}
+
+@keyframes textAppearance {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: .8;
+        transform: translateY(0);
+    }
+}
+
+.overlay__title {
+    font-size: 20vw;
+    font-weight: bold;
+    color: #a09999;
+    opacity: .7;
+    text-transform: uppercase;
+}
