@@ -6,6 +6,7 @@ body {
     background-color: #16acea;
     box-shadow: 0 0 200px rgba(0, 0, 0, 0.9) inset;
     font-family: 'Roboto', sans-serif;
+    user-select: none;
 }
 
 p, input {
@@ -29,11 +30,11 @@ p, input {
 @keyframes rotateandfade {
     from {
         transform: rotate(0deg);
-        opacity: 0;
+        /*opacity: 0;*/
     }
     to {
         transform: rotate(720deg);
-        opacity: 1;
+        /*opacity: 1;*/
     }
 }
 

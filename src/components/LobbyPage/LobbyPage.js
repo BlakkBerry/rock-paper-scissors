@@ -4,11 +4,13 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import './LobbyPage.css'
 import {faCheckCircle, faStar, faTimesCircle} from "@fortawesome/free-solid-svg-icons";
 import {useOverlay} from "../../context/OverlayContext";
+import {useLoader} from "../../context/LoaderContext";
 
 const LobbyPage = () => {
     const [username, setUsername] = useState('')
     const [ready, setReady] = useState(false)
     const {showOverlay, closeOverlay} = useOverlay()
+    const {loadPage} = useLoader()
     const inputRef = useRef()
     const readyBtnRef = useRef()
 
@@ -18,15 +20,19 @@ const LobbyPage = () => {
 
     return (
         !username ?
-            <Overlay>
+            <Overlay duration={0}>
                 <div className="join">
                     <div className="join__content">
                         <p className="text">Enter Your Name:</p>
                         <form className="join__form">
                             <input type="text" className="nickname-input" maxLength={22} ref={inputRef}/>
                             <div className="join__btn" onClick={() => {
-                                inputRef.current && setUsername(inputRef.current)
-                                closeOverlay()
+                                if (inputRef.current) {
+                                    loadPage().then(() => {
+                                        setUsername(inputRef.current)
+                                        closeOverlay()
+                                    })
+                                }
                             }}>Join
                             </div>
                         </form>

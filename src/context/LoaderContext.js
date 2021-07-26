@@ -17,7 +17,7 @@ export const LoaderProvider = ({children}) => {
 
             setTimeout(() => {
                 resolve()
-            }, animationDuration.current / 2.5)
+            }, animationDuration.current / 3)
 
             setTimeout(() => {
                 setIsLoading(false)

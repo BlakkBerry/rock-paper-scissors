@@ -1,10 +1,10 @@
 import './App.css';
 import {Switch, BrowserRouter as Router, Route} from 'react-router-dom'
-import StartPage from "./pages/StartPage/StartPage";
-import LobbyPage from "./pages/LobbyPage/LobbyPage";
-import GamePage from "./pages/GamePage/GamePage";
+import StartPage from "./components/StartPage/StartPage";
+import LobbyPage from "./components/LobbyPage/LobbyPage";
+import GamePage from "./components/GamePage/GamePage";
 import {LoaderProvider} from "./context/LoaderContext";
-import Loader from "./pages/Loader/Loader";
+import Loader from "./components/Loader/Loader";
 import {OverlayProvider} from "./context/OverlayContext";
 
 function App() {
