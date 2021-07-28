@@ -1,9 +1,9 @@
-import React, {useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import Overlay from "../Overlay/Overlay";
-import {Link} from "react-router-dom";
 import {useOverlay} from "../../context/OverlayContext";
 import {useNavigator} from "../../hooks/useNavigator";
 import Navigation from "../Navigation";
+import {HubConnectionBuilder} from "@microsoft/signalr";
 
 const StartPage = () => {
 
@@ -11,8 +11,35 @@ const StartPage = () => {
     const navigator = useNavigator()
     const inputRef = useRef()
 
+
+    const [connection, setConnection] = useState()
+
+    useEffect(() => {
+        const conn = new HubConnectionBuilder()
+            .withUrl('https://localhost:5001/hubs/rps')
+            .withAutomaticReconnect()
+            .build();
+
+        setConnection(conn)
+    }, []);
+
+    useEffect(() => {
+        if (connection) {
+            connection.start()
+                .then(result => {
+                    console.log('Connected!');
+                })
+                .catch(e => console.log('Connection failed: ', e));
+
+            connection.on('GameJoined', code => {
+                console.log('game joined with code', code)
+            })
+        }
+    }, [connection]);
+
     return (
         <>
+            <button onClick={() => connection.send('JoinGame', '123qwe')}>JOIN</button>
             <div className="container centered">
                 <div className="buttons">
                     <div className="button circle action" id="top-circle">
