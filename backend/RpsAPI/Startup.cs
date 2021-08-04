@@ -28,6 +28,7 @@ namespace RpsAPI
             services.AddCorsForClient("ClientPermission");
             services.AddDbContext<RpsDbContext>(options =>
                 options.UseNpgsql(Configuration.GetConnectionString("rpsDb")));
+            
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

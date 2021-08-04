@@ -12,8 +12,9 @@ namespace DAL
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Player>()
-                .HasOne(p => p.Game)
+                .HasOne<Game>()
                 .WithMany(p => p.Players)
+                .HasForeignKey(p => p.GameCode)
                 .OnDelete(DeleteBehavior.Cascade);
         }
 

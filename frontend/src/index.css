@@ -60,6 +60,7 @@ p, input {
 .button {
     width: 200px;
     height: 200px;
+    cursor: pointer;
     -webkit-tap-highlight-color: transparent;
 }
 
@@ -67,7 +68,6 @@ p, input {
     background-color: #4203c9;
     border-radius: 50%;
     font-size: 5rem;
-    cursor: pointer;
     transition: 0.1s all ease-in-out;
 
     display: flex;
@@ -104,6 +104,19 @@ p, input {
     display: inline;
 }
 
+.action {
+    font-size: 2rem;
+    line-height: 0;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    width: 200px;
+    height: 200px;
+}
+
 @media (max-width: 768px) {
     .buttons {
         width: 300px;
@@ -111,6 +124,12 @@ p, input {
     }
 
     .button {
+        width: 120px;
+        height: 120px;
+        font-size: 3rem;
+    }
+
+    .action {
         width: 120px;
         height: 120px;
         font-size: 3rem;
@@ -125,16 +144,6 @@ p, input {
     .text {
         font-size: 2rem;
     }
-}
-
-.action {
-    font-size: 2rem;
-    line-height: 0;
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
 }
 
 i {
@@ -203,25 +212,3 @@ i {
     margin: 10px 0;
 }
 
-.choices {
-    flex-basis: 90%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-}
-
-.choice {
-    margin: 20px;
-    flex-basis: 200px;
-    height: 200px;
-    cursor: default;
-}
-
-@media (max-width: 768px) {
-    /*.choice {*/
-    /*  flex-basis: 100px;*/
-    /*  height: 100px;*/
-    /*  font-size: 3rem;*/
-    /*}*/
-}

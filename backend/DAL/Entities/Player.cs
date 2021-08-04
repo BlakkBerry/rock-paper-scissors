@@ -9,12 +9,12 @@ namespace DAL.Entities
         [MaxLength(30)] public string Name { get; set; }
 
         public Choice Choice { get; set; } = Choice.None;
-
+        public bool IsConnected { get; set; }
         public bool IsReady { get; set; }
 
         public bool IsActive { get; set; }
-        
-        public Game Game { get; set; }
+
+        public string GameCode { get; set; }
 
         public Player(string connectionId)
         {

@@ -5,18 +5,13 @@ import Overlay from "../Overlay/Overlay";
 import {useOverlay} from "../../context/OverlayContext";
 import {faDoorOpen, faPlus, faSignInAlt} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {useHistory} from "react-router-dom";
 import {useNavigator} from "../../hooks/useNavigator";
+import Choice from "./Choice";
 
 const choices = {
-    rock: '✊',
-    paper: '✋',
-    scissors: '✌'
-}
-
-const getRandomChoice = () => {
-    const keys = Object.keys(choices)
-    return choices[keys[Math.floor(keys.length * Math.random())]]
+    rock: 1,
+    paper: 2,
+    scissors: 3
 }
 
 const getResults = (choice, botChoice) => {
@@ -33,7 +28,7 @@ const getResults = (choice, botChoice) => {
     return 'YOU LOSE'
 }
 
-const GamePage = () => {
+const OfflineGamePage = () => {
 
     const [choice, setChoice] = useState()
     const [botChoice, setBotChoice] = useState()
@@ -44,7 +39,7 @@ const GamePage = () => {
     const vote = (choice) => {
         loadPage().then(() => {
             setChoice(choice)
-            setBotChoice(getRandomChoice())
+            setBotChoice(Math.floor(Math.random() * 3 + 1)) // random number from 1 - 3
         })
 
         setTimeout(() => {
@@ -71,8 +66,8 @@ const GamePage = () => {
                 :
                 <>
                     <div className="choices">
-                        <div className="circle choice">{choice}</div>
-                        <div className="circle choice" style={{backgroundColor: 'red'}}>{botChoice}</div>
+                        <Choice choice={choice}/>
+                        <Choice choice={botChoice} color={'red'}/>
                     </div>
                     <Overlay onClick={() => reload()}>
                         <div className="toolbar">
@@ -87,7 +82,7 @@ const GamePage = () => {
                             </div>
                         </div>
                         <h1 className="overlay__title">{getResults(choice, botChoice)}</h1>
-                        <p className="overlay__continue">Press to continue...</p>
+                        <p className="overlay__hint">Press to continue...</p>
                     </Overlay>
                 </>
             }
@@ -95,4 +90,4 @@ const GamePage = () => {
     )
 };
 
-export default GamePage;
+export default OfflineGamePage;

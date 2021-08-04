@@ -8,9 +8,6 @@
     margin: 20px;
 }
 .gameinfo__players {
-    display: flex;
-    flex-wrap: wrap;
-
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: 1fr 1fr 1fr;
@@ -27,6 +24,9 @@
     padding: 0 15px;
 }
 
+.gameinfo__player.selected {
+    text-shadow: #fff 0 0 5px, #fff 0 0 10px;
+}
 
 @media (max-width: 1250px) {
     .gameinfo__players {

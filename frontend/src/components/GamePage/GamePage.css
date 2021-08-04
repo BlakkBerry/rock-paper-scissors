@@ -15,6 +15,7 @@
 
     font-size: 3rem;
     opacity: .8;
+    cursor: pointer;
 }
 
 @media (max-width: 768px) {
@@ -25,11 +26,6 @@
         top: unset;
         bottom: 0;
     }
-
-    .overlay__continue {
-        bottom: unset;
-        top: 20px;
-    }
 }
 
 .toolbar__item:hover {
@@ -39,4 +35,12 @@
 
 .toolbar__item:last-child {
     margin-right: 0;
+}
+
+.choices {
+    flex-basis: 90%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
 }

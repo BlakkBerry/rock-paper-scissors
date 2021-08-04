@@ -1,57 +1,45 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef} from 'react';
 import Overlay from "../Overlay/Overlay";
 import {useOverlay} from "../../context/OverlayContext";
 import {useNavigator} from "../../hooks/useNavigator";
 import Navigation from "../Navigation";
-import {HubConnectionBuilder} from "@microsoft/signalr";
+import {useConnection} from "../../context/ConnectionContext";
 
 const StartPage = () => {
 
     const {showOverlay, closeOverlay} = useOverlay()
     const navigator = useNavigator()
     const inputRef = useRef()
-
-
-    const [connection, setConnection] = useState()
+    const {connection} = useConnection()
 
     useEffect(() => {
-        const conn = new HubConnectionBuilder()
-            .withUrl('https://localhost:5001/hubs/rps')
-            .withAutomaticReconnect()
-            .build();
+        if (!connection) return
 
-        setConnection(conn)
-    }, []);
+        connection.on('GameCreated', code => {
+            console.log('Game is created!')
 
-    useEffect(() => {
-        if (connection) {
-            connection.start()
-                .then(result => {
-                    console.log('Connected!');
-                })
-                .catch(e => console.log('Connection failed: ', e));
+            navigator.navigate(`/lobby/${code}`)
+        })
+    }, [connection])
 
-            connection.on('GameJoined', code => {
-                console.log('game joined with code', code)
-            })
-        }
-    }, [connection]);
+    const createGame = () => connection.send('CreateGame')
+
 
     return (
         <>
-            <button onClick={() => connection.send('JoinGame', '123qwe')}>JOIN</button>
             <div className="container centered">
                 <div className="buttons">
-                    <div className="button circle action" id="top-circle">
-                        <Navigation to="/game">
+                    <Navigation to="/game">
+                        <div className="button circle action" id="top-circle">
                             <div className="text">Play</div>
-                        </Navigation>
-                    </div>
-                    <div className="button circle action" id="left-circle">
+                        </div>
+                    </Navigation>
+                    <div className="button circle action" id="left-circle"
+                         onClick={createGame}>
                         <p className="text">Create</p>
                     </div>
-                    <div className="button circle action" id="right-circle">
-                        <div className="text" id="join" onClick={() => showOverlay()}>Join</div>
+                    <div className="button circle action" id="right-circle" onClick={() => showOverlay()}>
+                        <div className="text" id="join">Join</div>
                     </div>
                 </div>
             </div>
@@ -62,7 +50,7 @@ const StartPage = () => {
                         <form className="join__form">
                             <input maxLength='7' placeholder="D2dQyC9" className="gamecode" ref={inputRef}/>
                             <div className="join__btn" onClick={() => {
-                                navigator.navigate(`lobby/${inputRef.current.value}`).then(() => {
+                                navigator.navigate(`/lobby/${inputRef.current.value}`).then(() => {
                                     closeOverlay()
                                 })
                             }}>Join

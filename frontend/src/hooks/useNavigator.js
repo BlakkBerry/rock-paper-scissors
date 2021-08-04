@@ -9,9 +9,9 @@ export const useNavigator = () => {
         navigate: path => {
             return new Promise(resolve => {
                 loadPage().then(() => {
-                    history.push(path)
-
                     resolve()
+
+                    setTimeout(() => history.push(path))
                 })
             })
         }

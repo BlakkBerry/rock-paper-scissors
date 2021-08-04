@@ -9,8 +9,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DAL.Migrations
 {
     [DbContext(typeof(RpsDbContext))]
-    [Migration("20210728193815_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20210802163301_Added IsReady field in Player")]
+    partial class AddedIsReadyfieldinPlayer
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -47,6 +47,9 @@ namespace DAL.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
 
+                    b.Property<bool>("IsConnected")
+                        .HasColumnType("boolean");
+
                     b.Property<bool>("IsReady")
                         .HasColumnType("boolean");
 
@@ -63,12 +66,10 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("DAL.Entities.Player", b =>
                 {
-                    b.HasOne("DAL.Entities.Game", "Game")
+                    b.HasOne("DAL.Entities.Game", null)
                         .WithMany("Players")
                         .HasForeignKey("GameCode")
                         .OnDelete(DeleteBehavior.Cascade);
-
-                    b.Navigation("Game");
                 });
 
             modelBuilder.Entity("DAL.Entities.Game", b =>

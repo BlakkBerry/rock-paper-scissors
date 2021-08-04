@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DAL.Entities;
@@ -15,8 +16,14 @@ namespace DAL
             _dbContext = dbContext;
         }
 
-        public async Task<Game> GetGameAsync(string gameId)
+        public async Task<Game> GetGameAsync(string gameId, bool includePlayers = false)
         {
+            if (includePlayers)
+            {
+                return await _dbContext.Games.Include(game => game.Players)
+                    .SingleOrDefaultAsync(game => game.GameCode == gameId);
+            }
+
             return await _dbContext.Games.FindAsync(gameId);
         }
 
@@ -24,6 +31,18 @@ namespace DAL
         {
             return await _dbContext.Players.FindAsync(playerId);
         }
+
+        // public async Task<Game> GetGameForPlayerAsync(string playerId, bool includePlayers = false)
+        // {
+        //     if (includePlayers)
+        //     {
+        //         return await _dbContext.Games.Include(game => game.Players).SingleOrDefaultAsync(game =>
+        //             game.Players.Any(player => player.ConnectionId == playerId));
+        //     }
+        //
+        //     return await _dbContext.Games.SingleOrDefaultAsync(game =>
+        //         game.Players.Any(player => player.ConnectionId == playerId));
+        // }
 
         public async Task<Game> CreateGameAsync(Game game)
         {
@@ -36,6 +55,12 @@ namespace DAL
         public async Task<Player> AddPlayerAsync(string gameId, Player player)
         {
             var game = await GetGameAsync(gameId);
+
+            if (game == null)
+                return null;
+
+            if (_dbContext.Players.Any(p => p.ConnectionId == player.ConnectionId))
+                return null;
 
             game.Players.Add(player);
 
@@ -53,18 +78,33 @@ namespace DAL
             return player;
         }
 
-        public async Task StartGame(string gameId)
+        public async Task UpdatePlayersAsync(IEnumerable<Player> players)
         {
-            var game = await GetGameAsync(gameId);
-
-            game.IsActive = true;
-
-            _dbContext.Update(game);
+            foreach (var player in players)
+            {
+                _dbContext.Entry(player).State = EntityState.Modified;
+            }
 
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task DeleteGame(string gameId)
+        public async Task StartGameAsync(Game game)
+        {
+            game.IsActive = true;
+
+            _dbContext.Update(game);
+
+            foreach (var player in game.Players)
+            {
+                player.IsActive = true;
+
+                _dbContext.Update(player);
+            }
+
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task DeleteGameAsync(string gameId)
         {
             var game = await GetGameAsync(gameId);
 
@@ -73,13 +113,28 @@ namespace DAL
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task DeletePlayer(string playerId)
+        public async Task<Player> DisconnectPlayerAsync(string playerId)
         {
             var player = await GetPlayerAsync(playerId);
 
-            _dbContext.Remove(playerId);
+            if (player == null)
+            {
+                return null;
+            }
+
+            _dbContext.Remove(player);
+            
+            var game = await GetGameAsync(player.GameCode, true);
+
+            // If that was the last player
+            if (game.Players.Count <= 1)
+            {
+                _dbContext.Remove(game);
+            }
 
             await _dbContext.SaveChangesAsync();
+
+            return player;
         }
     }
 }
