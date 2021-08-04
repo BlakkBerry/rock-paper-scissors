@@ -1,0 +1,19 @@
+.online-choice {
+    width: 400px;
+    height: 400px;
+    font-size: 8rem;
+    cursor: auto;
+}
+
+@media (max-width: 768px) {
+    .online-choice {
+        width: 200px;
+        height: 200px;
+        font-size: 4rem;
+    }
+}
+
+.results {
+    display: flex;
+    flex-direction: column;
+}
