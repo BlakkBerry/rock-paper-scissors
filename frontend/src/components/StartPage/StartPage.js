@@ -4,26 +4,26 @@ import {useOverlay} from "../../context/OverlayContext";
 import {useNavigator} from "../../hooks/useNavigator";
 import Navigation from "../Navigation";
 import {useConnection} from "../../context/ConnectionContext";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faDungeon, faGamepad, faLaptopHouse} from "@fortawesome/free-solid-svg-icons";
 
 const StartPage = () => {
 
     const {showOverlay, closeOverlay} = useOverlay()
     const navigator = useNavigator()
     const inputRef = useRef()
-    const {connection} = useConnection()
+    const {connection, connectionState} = useConnection()
 
     useEffect(() => {
-        if (!connection) return
+        if (!connection || connectionState !== 'Connected') return
 
         connection.on('GameCreated', code => {
             console.log('Game is created!')
 
             navigator.navigate(`/lobby/${code}`)
         })
-    }, [connection])
 
-    const createGame = () => connection.send('CreateGame')
-
+    }, [connection, connectionState])
 
     return (
         <>
@@ -32,14 +32,25 @@ const StartPage = () => {
                     <Navigation to="/game">
                         <div className="button circle action" id="top-circle">
                             <div className="text">Play</div>
+                            <div className="bg-icon">
+                                <FontAwesomeIcon icon={faGamepad} />
+                            </div>
                         </div>
                     </Navigation>
                     <div className="button circle action" id="left-circle"
-                         onClick={createGame}>
+                         onClick={() => connection.send('CreateGame')}>
                         <p className="text">Create</p>
+                        <div className="bg-icon">
+                            <FontAwesomeIcon icon={faLaptopHouse} />
+                        </div>
                     </div>
                     <div className="button circle action" id="right-circle" onClick={() => showOverlay()}>
-                        <div className="text" id="join">Join</div>
+                        <div className="text" id="join">
+                            Join
+                        </div>
+                        <div className="bg-icon">
+                            <FontAwesomeIcon icon={faDungeon} />
+                        </div>
                     </div>
                 </div>
             </div>
@@ -48,7 +59,7 @@ const StartPage = () => {
                     <div className="join__content">
                         <p className="text">Enter Game Code:</p>
                         <form className="join__form">
-                            <input maxLength='7' placeholder="D2dQyC9" className="gamecode" ref={inputRef}/>
+                            <input maxLength='8' placeholder="D2dQyC9S" className="gamecode" ref={inputRef}/>
                             <div className="join__btn" onClick={() => {
                                 navigator.navigate(`/lobby/${inputRef.current.value}`).then(() => {
                                     closeOverlay()

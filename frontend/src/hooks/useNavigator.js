@@ -11,7 +11,21 @@ export const useNavigator = () => {
                 loadPage().then(() => {
                     resolve()
 
-                    setTimeout(() => history.push(path))
+                    setTimeout(() => {
+                        history.push(path)
+                    })
+                })
+            })
+        },
+        navigateAndReload: path => {
+            return new Promise(resolve => {
+                loadPage().then(() => {
+                    resolve()
+
+                    setTimeout(() => {
+                        history.push(path)
+                        window.location.reload()
+                    })
                 })
             })
         }

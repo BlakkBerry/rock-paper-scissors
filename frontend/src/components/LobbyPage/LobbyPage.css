@@ -6,6 +6,7 @@
 .gameinfo__additional {
     color: rgb(212, 212, 212);
     margin: 20px;
+    user-select: text;
 }
 .gameinfo__players {
     display: grid;

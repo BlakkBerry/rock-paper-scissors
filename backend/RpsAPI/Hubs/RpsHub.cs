@@ -48,6 +48,13 @@ namespace RpsAPI.Hubs
             }
 
             var player = await _repository.GetPlayerAsync(Context.ConnectionId);
+
+            if (player == null)
+            {
+                await Clients.Caller.SendAsync("ReceiveError", "User is not connected to any game.");
+                return;
+            }
+            
             var game = await _repository.GetGameAsync(player.GameCode, true);
 
             if (game == null)
@@ -73,6 +80,12 @@ namespace RpsAPI.Hubs
         public async Task SetIsReady(bool isReady)
         {
             var player = await _repository.GetPlayerAsync(Context.ConnectionId);
+
+            if (player == null)
+            {
+                await Clients.Caller.SendAsync("ReceiveError", "Cannot change state of a player.");
+                return;
+            }
 
             player.IsReady = isReady;
 
@@ -114,6 +127,12 @@ namespace RpsAPI.Hubs
             }
 
             var player = await _repository.GetPlayerAsync(Context.ConnectionId);
+
+            if (player == null)
+            {
+                await Clients.Caller.SendAsync("ReceiveError", "You cannot vote right now.");
+                return;
+            }
 
             if (!player.IsActive || player.Choice != Choice.None)
             {
@@ -224,6 +243,13 @@ namespace RpsAPI.Hubs
             if (player != null)
             {
                 await Clients.OthersInGroup(player.GameCode).SendAsync("PlayerDisconnected", player.ConnectionId);
+
+                var game = await _repository.GetGameAsync(player.GameCode, true);
+
+                if (game.Players.Count <= 1)
+                {
+                    await Clients.Group(player.GameCode).SendAsync("PlayersDisconnected");
+                }
             }
         }
     }

@@ -1,12 +1,10 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {useLoader} from "../../context/LoaderContext";
 import './GamePage.css'
 import Overlay from "../Overlay/Overlay";
 import {useOverlay} from "../../context/OverlayContext";
-import {faDoorOpen, faPlus, faSignInAlt} from "@fortawesome/free-solid-svg-icons";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {useNavigator} from "../../hooks/useNavigator";
 import Choice from "./Choice";
+import Toolbar from "./Toolbar";
 
 const choices = {
     rock: 1,
@@ -34,7 +32,6 @@ const OfflineGamePage = () => {
     const [botChoice, setBotChoice] = useState()
     const {loadPage} = useLoader()
     const {showOverlay, closeOverlay} = useOverlay()
-    const navigator = useNavigator()
 
     const vote = (choice) => {
         loadPage().then(() => {
@@ -70,17 +67,7 @@ const OfflineGamePage = () => {
                         <Choice choice={botChoice} color={'red'}/>
                     </div>
                     <Overlay onClick={() => reload()}>
-                        <div className="toolbar">
-                            <div className="toolbar__item circle" onClick={() => navigator.navigate('/')}>
-                                <FontAwesomeIcon icon={faDoorOpen}/>
-                            </div>
-                            <div className="toolbar__item circle" onClick={() => navigator.navigate('/')}>
-                                <FontAwesomeIcon icon={faPlus}/>
-                            </div>
-                            <div className="toolbar__item circle" onClick={() => navigator.navigate('/')}>
-                                <FontAwesomeIcon icon={faSignInAlt}/>
-                            </div>
-                        </div>
+                        <Toolbar />
                         <h1 className="overlay__title">{getResults(choice, botChoice)}</h1>
                         <p className="overlay__hint">Press to continue...</p>
                     </Overlay>

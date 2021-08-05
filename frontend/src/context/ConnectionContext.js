@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useReducer, useState} from 'react';
+import React, {useContext, useEffect, useReducer} from 'react';
 import {HubConnectionBuilder} from "@microsoft/signalr";
 
 const ConnectionContext = React.createContext()

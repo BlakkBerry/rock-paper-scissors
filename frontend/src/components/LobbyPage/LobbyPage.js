@@ -20,7 +20,6 @@ const LobbyPage = () => {
     const {id} = useParams()
     const navigator = useNavigator()
 
-
     const {connection, connectionState} = useConnection()
 
     useEffect(() => {

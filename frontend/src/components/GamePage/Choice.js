@@ -2,6 +2,7 @@ import React from 'react';
 import './Choice.css'
 
 const choicesMappings = {
+    0: '?',
     1: '✊',
     2: '✋',
     3: '✌'
