@@ -8,6 +8,7 @@ import Overlay from "../Overlay/Overlay";
 import Choice from "./Choice";
 import Toolbar from "./Toolbar";
 import {useNavigator} from "../../hooks/useNavigator";
+import {useParams} from "react-router";
 
 const choices = {
     none: 0,
@@ -43,6 +44,7 @@ const OnlineGamePage = () => {
     const navigator = useNavigator()
     const connectionId = useRef()
     const getConnectionId = () => connectionId.current
+    const {id} = useParams()
 
     const {loadPage} = useLoader()
     const {showOverlay, closeOverlay} = useOverlay()
@@ -60,11 +62,13 @@ const OnlineGamePage = () => {
     useEffect(() => {
         if (!connection || connectionState !== 'Connected') return
 
-        connection.send('GetConnectionId')
+        connection.send('IsAllowedToJoinGame', id)
 
-        connection.on('ReceiveConnectionId', id => {
-            connectionId.current = id
+        connection.on('CanJoinGame', canJoin => {
+            if (!canJoin) navigator.navigateAndReload('/')
         })
+
+        connectionId.current = connection.connection.connectionId
 
         connection.on('Draw', players => {
             setPlayerState(PlayerState.draw)
@@ -102,6 +106,7 @@ const OnlineGamePage = () => {
         })
 
     }, [connection, connectionState])
+
 
     const setGameState = state => {
         _setGameState(state)

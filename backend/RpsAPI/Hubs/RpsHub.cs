@@ -54,7 +54,7 @@ namespace RpsAPI.Hubs
                 await Clients.Caller.SendAsync("ReceiveError", "User is not connected to any game.");
                 return;
             }
-            
+
             var game = await _repository.GetGameAsync(player.GameCode, true);
 
             if (game == null)
@@ -231,9 +231,23 @@ namespace RpsAPI.Hubs
             await _repository.UpdatePlayersAsync(game.Players);
         }
 
-        public async Task GetConnectionId()
+        public async Task IsAllowedToJoinGame(string gameId)
         {
-            await Clients.Caller.SendAsync("ReceiveConnectionId", Context.ConnectionId);
+            var game = await _repository.GetGameAsync(gameId, true);
+
+            if (game == null)
+            {
+                await Clients.Caller.SendAsync("CanJoinGame", false);
+                return;
+            }
+
+            if (game.IsActive && game.Players.Any(p => p.ConnectionId == Context.ConnectionId))
+            {
+                await Clients.Caller.SendAsync("CanJoinGame", true);
+                return;
+            }
+
+            await Clients.Caller.SendAsync("CanJoinGame", false);
         }
 
         public override async Task OnDisconnectedAsync(Exception? exception)
@@ -246,9 +260,14 @@ namespace RpsAPI.Hubs
 
                 var game = await _repository.GetGameAsync(player.GameCode, true);
 
+                if (game == null)
+                {
+                    return;
+                }
+
                 if (game.Players.Count <= 1)
                 {
-                    await Clients.Group(player.GameCode).SendAsync("PlayersDisconnected");
+                    await Clients.GroupExcept(game.GameCode, Context.ConnectionId).SendAsync("PlayersDisconnected");
                 }
             }
         }

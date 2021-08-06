@@ -1,5 +1,6 @@
-import React, {useContext, useEffect, useReducer} from 'react';
+import React, {useContext, useEffect, useReducer, useState} from 'react';
 import {HubConnectionBuilder} from "@microsoft/signalr";
+import {useNavigator} from "../hooks/useNavigator";
 
 const ConnectionContext = React.createContext()
 
@@ -18,8 +19,8 @@ const reducer = (state, action) => {
 
 export const ConnectionProvider = ({children}) => {
 
-    // const [connection, setConnection] = useState()
     const [state, dispatch] = useReducer(reducer, {connection: null, connectionState: null})
+    const [error, setError] = useState()
 
     const setConnection = (connection) => dispatch({
         type: 'SET_CONNECTION',
@@ -48,13 +49,14 @@ export const ConnectionProvider = ({children}) => {
             .catch(e => console.log('Connection failed: ', e));
 
         state.connection.on('ReceiveError', message => {
+            setError(message)
             console.log('[ERROR]: ', message)
         })
 
     }, [state.connection])
 
     return (
-        <ConnectionContext.Provider value={{connection: state.connection, connectionState: state.connectionState}}>
+        <ConnectionContext.Provider value={{connection: state.connection, connectionState: state.connectionState, error}}>
             {children}
         </ConnectionContext.Provider>
     );

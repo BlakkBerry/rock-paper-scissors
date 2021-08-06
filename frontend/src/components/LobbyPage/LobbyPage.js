@@ -16,14 +16,23 @@ const LobbyPage = () => {
     const [players, setPlayers] = useState([])
     const {showOverlay, closeOverlay} = useOverlay()
     const {loadPage} = useLoader()
-    const inputRef = useRef()
+    const [nameInput, setNameInput] = useState('')
     const {id} = useParams()
     const navigator = useNavigator()
 
-    const {connection, connectionState} = useConnection()
+    const {connection, connectionState, error} = useConnection()
 
     useEffect(() => {
-        showOverlay()
+        const name = new URLSearchParams(window.location.search).get('name')
+
+        if (!name) showOverlay()
+        else setUsername(name)
+
+        // if (name) {
+        //     setNameInput(name)
+        // }
+        // showOverlay()
+
     }, [])
 
     useEffect(() => {
@@ -86,19 +95,27 @@ const LobbyPage = () => {
                 <div className="join__content">
                     <p className="text">Enter Your Name:</p>
                     <form className="join__form">
-                        <input type="text" className="nickname-input" maxLength={22} ref={inputRef}/>
+                        <input type="text" className="nickname-input" maxLength={22} onChange={e => setNameInput(e.target.value)} value={nameInput}/>
                         <div className="join__btn" onClick={() => {
-                            if (inputRef.current) {
-                                loadPage().then(() => {
-                                    const username = inputRef.current.value
-                                    if (!username) return
+                            // if (nameInput) {
+                            //     loadPage().then(() => {
+                            //         const username = nameInput
+                            //         if (!username) return
+                            //
+                            //         connection.send('SetUsername', username).then(() => {
+                            //             setUsername(username)
+                            //             closeOverlay()
+                            //         })
+                            //     })
+                            // }
+                            if (!nameInput) return
 
-                                    connection.send('SetUsername', username).then(() => {
-                                        setUsername(username)
-                                        closeOverlay()
-                                    })
+                            loadPage().then(() => {
+                                connection.send('SetUsername', nameInput).then(() => {
+                                    setUsername(nameInput)
+                                    closeOverlay()
                                 })
-                            }
+                            })
                         }}>Join
                         </div>
                     </form>
