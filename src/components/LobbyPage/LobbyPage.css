@@ -1,0 +1,72 @@
+.gameinfo {
+    text-align: center;
+    padding-top: 10%;
+}
+
+.gameinfo__additional {
+    color: rgb(212, 212, 212);
+    margin: 20px;
+    user-select: text;
+}
+.gameinfo__players {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 1fr 1fr 1fr;
+    gap: 15px;
+}
+
+.gameinfo__player {
+    display: flex;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.226);
+    border-radius: 5px;
+    height: 50px;
+    color: white;
+    padding: 0 15px;
+}
+
+.gameinfo__player.selected {
+    text-shadow: #fff 0 0 5px, #fff 0 0 10px;
+}
+
+@media (max-width: 1250px) {
+    .gameinfo__players {
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: 1fr 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .gameinfo__players {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr;
+    }
+}
+
+.gameinfo__readyness {
+    margin-left: auto;
+    padding-right: 10px;
+}
+
+.gameinfo__ready {
+    height: 10px;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 10%;
+    margin: 10px auto;
+    cursor: pointer;
+    transition: .2s all ease;
+}
+
+.gameinfo__ready.not-ready {
+    color: #ff2929;
+    border: 2px solid #ff2929;
+}
+
+.gameinfo__ready.ready {
+    color: #7aec50;
+    border: 2px solid #7aec50;
+}
+
