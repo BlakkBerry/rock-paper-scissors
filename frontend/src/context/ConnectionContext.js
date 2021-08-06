@@ -1,6 +1,5 @@
 import React, {useContext, useEffect, useReducer, useState} from 'react';
 import {HubConnectionBuilder} from "@microsoft/signalr";
-import {useNavigator} from "../hooks/useNavigator";
 
 const ConnectionContext = React.createContext()
 
@@ -28,10 +27,9 @@ export const ConnectionProvider = ({children}) => {
         connectionState: connection?.state
     })
 
-
     useEffect(() => {
         const conn = new HubConnectionBuilder()
-            .withUrl('https://localhost:5001/hubs/rps')
+            .withUrl(process.env.REACT_APP_HUB_IP)
             .withAutomaticReconnect()
             .build();
 

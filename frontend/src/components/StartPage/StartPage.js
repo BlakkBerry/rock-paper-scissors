@@ -6,12 +6,14 @@ import Navigation from "../Navigation";
 import {useConnection} from "../../context/ConnectionContext";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faDungeon, faGamepad, faLaptopHouse} from "@fortawesome/free-solid-svg-icons";
+import {useAlert} from "../../context/AlertContext";
 
 const StartPage = () => {
 
     const {showOverlay, closeOverlay} = useOverlay()
     const navigator = useNavigator()
     const inputRef = useRef()
+    const {showAlert} = useAlert()
     const {connection, connectionState} = useConnection()
 
     useEffect(() => {
@@ -38,7 +40,14 @@ const StartPage = () => {
                         </div>
                     </Navigation>
                     <div className="button circle action" id="left-circle"
-                         onClick={() => connection.send('CreateGame')}>
+                         onClick={() => {
+                             if (!connection || connectionState !== 'Connected') {
+                                 showAlert('Server is not working. You can only play offline mode for now.')
+                                 return
+                             }
+
+                             connection.send('CreateGame')
+                         }}>
                         <p className="text">Create</p>
                         <div className="bg-icon">
                             <FontAwesomeIcon icon={faLaptopHouse} />
@@ -61,6 +70,13 @@ const StartPage = () => {
                         <form className="join__form">
                             <input maxLength='8' placeholder="D2dQyC9S" className="gamecode" ref={inputRef}/>
                             <div className="join__btn" onClick={() => {
+
+                                if (!connection || connectionState !== 'Connected') {
+                                    showAlert('Server is not working. You can only play offline mode for now.')
+                                    closeOverlay()
+                                    return
+                                }
+
                                 navigator.navigate(`/lobby/${inputRef.current.value}`).then(() => {
                                     closeOverlay()
                                 })

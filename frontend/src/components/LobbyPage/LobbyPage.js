@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Overlay from "../Overlay/Overlay";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import './LobbyPage.css'
@@ -25,13 +25,13 @@ const LobbyPage = () => {
     useEffect(() => {
         const name = new URLSearchParams(window.location.search).get('name')
 
-        if (!name) showOverlay()
-        else setUsername(name)
+        // if (!name) showOverlay()
+        // else setUsername(name)
 
-        // if (name) {
-        //     setNameInput(name)
-        // }
-        // showOverlay()
+        if (name) {
+            setNameInput(name)
+        }
+        showOverlay()
 
     }, [])
 

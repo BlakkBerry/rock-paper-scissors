@@ -1,6 +1,6 @@
 import React from 'react';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faDoorOpen, faPlus, faSignInAlt} from "@fortawesome/free-solid-svg-icons";
+import {faSignInAlt} from "@fortawesome/free-solid-svg-icons";
 import {useNavigator} from "../../hooks/useNavigator";
 import {useOverlay} from "../../context/OverlayContext";
 

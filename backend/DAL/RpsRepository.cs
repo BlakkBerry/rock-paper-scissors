@@ -32,18 +32,6 @@ namespace DAL
             return await _dbContext.Players.FindAsync(playerId);
         }
 
-        // public async Task<Game> GetGameForPlayerAsync(string playerId, bool includePlayers = false)
-        // {
-        //     if (includePlayers)
-        //     {
-        //         return await _dbContext.Games.Include(game => game.Players).SingleOrDefaultAsync(game =>
-        //             game.Players.Any(player => player.ConnectionId == playerId));
-        //     }
-        //
-        //     return await _dbContext.Games.SingleOrDefaultAsync(game =>
-        //         game.Players.Any(player => player.ConnectionId == playerId));
-        // }
-
         public async Task<Game> CreateGameAsync(Game game)
         {
             await _dbContext.AddAsync(game);
