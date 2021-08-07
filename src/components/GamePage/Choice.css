@@ -16,11 +16,3 @@
     height: 200px;
     cursor: default;
 }
-
-@media (max-width: 768px) {
-    /*.choice {*/
-    /*  flex-basis: 100px;*/
-    /*  height: 100px;*/
-    /*  font-size: 3rem;*/
-    /*}*/
-}
